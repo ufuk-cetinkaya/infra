@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gibuser-worker
+  namespace: edonusum
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gibuser-worker
+  template:
+    metadata:
+      labels:
+        app: gibuser-worker
+    spec:
+      containers:
+      - name: gibuser-worker
+        image: ghcr.io/ufuk-cetinkaya/gib-user-worker:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - secretRef:
+            name: gibuserdb-secret
+        - configMapRef:
+            name: gibuser-worker-config

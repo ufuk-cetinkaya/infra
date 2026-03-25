@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: signer-ws
+  namespace: edonusum
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: signer-ws
+  template:
+    metadata:
+      labels:
+        app: signer-ws
+    spec:
+      containers:
+      - name: signer-ws
+        image: ghcr.io/ufuk-cetinkaya/signer-ws:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
