@@ -4,7 +4,7 @@ metadata:
   name: gibuser-worker
   namespace: edonusum
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: gibuser-worker
