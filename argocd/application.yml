@@ -16,7 +16,8 @@ spec:
     repoURL: https://github.com/ufuk-cetinkaya/infra.git
     targetRevision: main
     path: apps
-
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: default
