@@ -25,10 +25,10 @@ resource "azurerm_resource_group" "rg1" {
 
 resource "azurerm_kubernetes_cluster" "aks" {
 
-  name                = "demo-aks"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "demoaks"
+  name                      = "demo-aks"
+  location                  = azurerm_resource_group.rg.location
+  resource_group_name       = azurerm_resource_group.rg.name
+  dns_prefix                = "demoaks"
   oidc_issuer_enabled       = true
   workload_identity_enabled = true
 
@@ -76,16 +76,16 @@ resource "azurerm_mssql_server" "sql" {
 }
 
 resource "azurerm_mssql_database" "appdb" {
-  name           = "gibuserdb"
-  server_id      = azurerm_mssql_server.sql.id
-  sku_name       = "Basic"
+  name                 = "gibuserdb"
+  server_id            = azurerm_mssql_server.sql.id
+  sku_name             = "Basic"
   storage_account_type = "Local"
 }
 
 resource "azurerm_mssql_database" "appdb2" {
-  name           = "ebelgedb"
-  server_id      = azurerm_mssql_server.sql.id
-  sku_name       = "Basic"
+  name                 = "ebelgedb"
+  server_id            = azurerm_mssql_server.sql.id
+  sku_name             = "Basic"
   storage_account_type = "Local"
 }
 
@@ -97,11 +97,11 @@ resource "azurerm_mssql_firewall_rule" "azure_services" {
 }
 
 resource "azurerm_key_vault" "keyvault" {
-  name                        = "demo-aks-vault"
-  location                    = azurerm_resource_group.rg.location
-  resource_group_name         = azurerm_resource_group.rg.name
-  tenant_id                   = "226eefbc-6526-4679-82cb-27d07f52200c"
-  sku_name                    = "standard"
+  name                = "demo-aks-vault"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  tenant_id           = "226eefbc-6526-4679-82cb-27d07f52200c"
+  sku_name            = "standard"
 }
 
 resource "azurerm_key_vault_secret" "ebelgedb" {
