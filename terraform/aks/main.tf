@@ -95,3 +95,16 @@ resource "azurerm_mssql_firewall_rule" "azure_services" {
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
 }
+
+resource "azurerm_key_vault" "keyvault" {
+  name                        = "demo-aks-vault"
+  location                    = azurerm_resource_group.rg.location
+  resource_group_name         = azurerm_resource_group.rg.name
+  tenant_id                   = "226eefbc-6526-4679-82cb-27d07f52200c"
+  sku_name                    = "standard"
+}
+
+resource "azurerm_key_vault_secret" "ebelgedb" {
+  name         = "ebelgedb"
+  key_vault_id = azurerm_key_vault.keyvault.id
+}
