@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: |
+      gib-user-api=ghcr.io/ufuk-cetinkaya/gib-user-api
+      gib-user-worker=ghcr.io/ufuk-cetinkaya/gib-user-worker
+      signer-ws=ghcr.io/ufuk-cetinkaya/signer-ws
+      document-api=ghcr.io/ufuk-cetinkaya/document-api
+      envelope-api=ghcr.io/ufuk-cetinkaya/envelope-api
+      envelope-worker=ghcr.io/ufuk-cetinkaya/envelope-worker
+      report-worker=ghcr.io/ufuk-cetinkaya/report-worker
+    
+    argocd-image-updater.argoproj.io/gib-user-api.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/gib-user-api.pull-secret: pullsecret:argocd/ghcr-secret
+    
+    argocd-image-updater.argoproj.io/gib-user-worker.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/gib-user-worker.pull-secret: pullsecret:argocd/ghcr-secret
+
+    argocd-image-updater.argoproj.io/signer-ws.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/signer-ws.pull-secret: pullsecret:argocd/ghcr-secret
+
+    argocd-image-updater.argoproj.io/document-api.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/document-api.pull-secret: pullsecret:argocd/ghcr-secret
+    
+    argocd-image-updater.argoproj.io/envelope-api.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/envelope-api.pull-secret: pullsecret:argocd/ghcr-secret
+    
+    argocd-image-updater.argoproj.io/envelope-worker.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/envelope-worker.pull-secret: pullsecret:argocd/ghcr-secret
+    
+    argocd-image-updater.argoproj.io/report-worker.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/report-worker.pull-secret: pullsecret:argocd/ghcr-secret
+    
+    argocd-image-updater.argoproj.io/write-back-method: git
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ufuk-cetinkaya/infra.git
+    targetRevision: main
+    path: apps
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: edonusum
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
