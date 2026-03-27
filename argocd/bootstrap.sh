@@ -1,28 +1,31 @@
 #!/bin/bash
+
 set -e
 
-echo "Creating argocd namespace..."
-kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
-
 echo "Installing ArgoCD..."
-kubectl apply -n argocd -f install.yml
-# https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+helm upgrade --install argocd argo/argo-cd \
+  --namespace argocd \
+  --create-namespace
 
-echo "Waiting for ArgoCD server..."
-kubectl wait --for=condition=available deployment/argocd-server -n argocd --timeout=300s
-
-echo "Installing ArgoCD Application..."
-kubectl apply -f application.yml
-
-echo "Installing Image Updater..."
+kubectl apply -f services.yml
 kubectl apply -f image-updater.yml
 
-# helm repo add argo https://argoproj.github.io/argo-helm
-# helm repo update
-# helm install argocd-image-updater argo/argocd-image-updater -n argocd
-
-echo "Installing External Secrets Operator for creating k8s secrets from azure keyvault secrets"
+echo "Installing External Secrets Operator(ESO)"
 helm repo add external-secrets https://charts.external-secrets.io
+helm repo update
 helm install external-secrets external-secrets/external-secrets -n external-secrets --create-namespace
+
+kubectl apply -f ServiceAccount.yml
+kubectl apply -f SecretStore.yml
+kubectl apply -f infra-git-secret
+kubectl apply -f ghcr-secret.yml
+
+echo "Installing ingress-nginx"
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+kubectl create deployment nginx --image=nginx -n ingress-nginx
 
 echo "Bootstrap completed."
