@@ -103,8 +103,3 @@ resource "azurerm_key_vault" "keyvault" {
   tenant_id           = "226eefbc-6526-4679-82cb-27d07f52200c"
   sku_name            = "standard"
 }
-
-resource "azurerm_key_vault_secret" "ebelgedb" {
-  name         = "ebelgedb"
-  key_vault_id = azurerm_key_vault.keyvault.id
-}
