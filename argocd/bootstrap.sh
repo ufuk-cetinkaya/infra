@@ -26,6 +26,10 @@ echo "Installing ingress-nginx"
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+
+kubectl annotate service ingress-nginx-controller -n ingress-nginx \
+  service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path="/healthz" --overwrite
+
 kubectl create deployment nginx --image=nginx -n ingress-nginx
 
 openssl req -x509 -nodes -days 365 \
