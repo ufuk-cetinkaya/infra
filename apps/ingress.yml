@@ -5,7 +5,10 @@ metadata:
   namespace: edonusum
 spec:
   ingressClassName: nginx
-
+  tls:
+  - hosts:
+    - api.ufukcetinkaya.net
+    secretName: api-tls
   rules:
   - host: api.ufukcetinkaya.net
     http:
